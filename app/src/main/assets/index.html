@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Global Markets Tracker</title>
+<style>
+body { background: #000; color: #fff; font-family: sans-serif; }
+.card { background: #111; margin: 10px; padding: 10px; border-radius: 8px; }
+.green { color: #0f0; }
+.red { color: #f33; }
+</style>
+</head>
+<body>
+<h1>🌍 Global Markets Tracker</h1>
+<div id="content">Loading data...</div>
+<script>
+(async()=>{
+ const indices=[{name:'S&P 500',symbol:'SPX'},{name:'NASDAQ',symbol:'IXIC'},{name:'Dow Jones',symbol:'DJI'}];
+ let html='';
+ for(const i of indices){
+   try{
+     const r=await fetch(`https://financialmodelingprep.com/api/v3/quote/${i.symbol}?apikey=d29hemhr01qhoenc7vhgd29hemhr01qhoenc7vi0`);
+     const d=(await r.json())[0];
+     html+=`<div class="card"><b>${i.name}</b><br>${d.price.toFixed(2)}<br><span class="${d.changesPercentage>=0?'green':'red'}">${d.changesPercentage.toFixed(2)}%</span></div>`;
+   }catch{html+=`<div class="card">${i.name}: Error</div>`;}
+ }
+ document.getElementById("content").innerHTML=html;
+})();
+</script>
+</body>
+</html>
