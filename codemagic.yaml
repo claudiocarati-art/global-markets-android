@@ -1,14 +1,18 @@
 workflows:
-  android-apk:
+  build-android:
     name: Build Global Markets APK
     max_build_duration: 30
+    instance_type: mac_pro
     environment:
-      android:
-        image: default
-      java: 17
+      groups:
+        - keystore_credentials   # puoi lasciare vuoto se usi la firma di test
+      vars:
+        JAVA_HOME: /usr/lib/jvm/java-17-openjdk
     scripts:
-      - name: Clean Project
-        script: ./gradlew clean
+      - name: Set up environment
+        script: |
+          echo "Using Java version:"
+          java -version
       - name: Build APK
         script: ./gradlew assembleRelease
     artifacts:
@@ -16,4 +20,4 @@ workflows:
     publishing:
       email:
         recipients:
-          - claudio.carati.pc@gmail.com
+          - your-email@example.com
